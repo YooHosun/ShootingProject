@@ -29,5 +29,5 @@ void TitleScene::Update()
 
 void TitleScene::Render(HDC hdc)
 {
-	TextOut(hdc, 100, 100, L"Title Scene", 12);
+	TextOut(hdc, 100, 100, L"End", 12);
 }

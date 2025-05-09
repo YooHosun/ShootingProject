@@ -30,17 +30,6 @@ EnemyManager::~EnemyManager()
 
 void EnemyManager::Update()
 {
-	spawnTimer += DELTA;
-
-	if (spawnTimer >= SPAWN_INTERVAL)
-	{
-		if (enemyCount < 5) // 최대 적 수
-		{
-			spawnTimer = 0.0f;
-			SpawnEnemy();
-		}
-	}
-
 	for (Enemy*& enemy : enemies)
 	{
 		enemy->Update();
@@ -54,12 +43,31 @@ void EnemyManager::Update()
 	}
 	enemyCount = aliveCount;
 
-	if (enemyCount == 0 && !stageClearTriggered)
+	if (enemyCount == 0 && !stageClearTriggered && IsAllEnemiesSpawned)
 	{
 		stageClearTriggered = true;
 		stageClearTimer = 0.0f;
 	}
 
+	spawnTimer += DELTA;
+
+	if (spawnedEnemyCount < 5)
+	{
+		if (spawnTimer >= SPAWN_INTERVAL)
+		{
+			spawnTimer = 0.0f;
+
+			if (SpawnEnemy()) 
+			{
+				spawnedEnemyCount++;
+			}
+
+			if (spawnedEnemyCount >= 5)
+			{
+				IsAllEnemiesSpawned = true;
+			}
+		}
+	}
 
 	if (stageClearTriggered)
 	{
@@ -75,39 +83,107 @@ void EnemyManager::Update()
 
 void EnemyManager::Update2()
 {
-	spawnTimer += DELTA;
-
-	if (spawnTimer >= SPAWN_INTERVAL)
-	{
-		if (enemyCount < 10) // 최대 적 수
-		{
-			spawnTimer = 0.0f;
-			SpawnEnemy2();
-		}
-	}
-
 	for (Enemy*& enemy : enemies)
 	{
 		enemy->Update();
+	}
+
+	int aliveCount = 0;
+	for (Enemy* enemy : enemies)
+	{
+		if (enemy->IsActive())
+			aliveCount++;
+	}
+	enemyCount = aliveCount;
+
+	if (enemyCount == 0 && !stageClearTriggered && IsAllEnemiesSpawned)
+	{
+		stageClearTriggered = true;
+		stageClearTimer = 0.0f;
+	}
+
+	spawnTimer += DELTA;
+
+	if (spawnedEnemyCount < 10)
+	{
+		if (spawnTimer >= SPAWN_INTERVAL)
+		{
+			spawnTimer = 0.0f;
+
+			if (SpawnEnemy())
+			{
+				spawnedEnemyCount++;
+			}
+
+			if (spawnedEnemyCount >= 10)
+			{
+				IsAllEnemiesSpawned = true;
+			}
+		}
+	}
+
+	if (stageClearTriggered)
+	{
+		stageClearTimer += DELTA;
+
+		if (stageClearTimer >= 2.0f)
+		{
+			allEnemiesCleared = true;
+			SCENE->ChangeScene("Game3");
+		}
 	}
 }
 
 void EnemyManager::Update3()
 {
-	spawnTimer += DELTA;
-
-	if (spawnTimer >= SPAWN_INTERVAL)
-	{
-		if (enemyCount < 15) // 최대 적 수
-		{
-			spawnTimer = 0.0f;
-			SpawnEnemy3();
-		}
-	}
-
 	for (Enemy*& enemy : enemies)
 	{
 		enemy->Update();
+	}
+
+	int aliveCount = 0;
+	for (Enemy* enemy : enemies)
+	{
+		if (enemy->IsActive())
+			aliveCount++;
+	}
+	enemyCount = aliveCount;
+
+	if (enemyCount == 0 && !stageClearTriggered && IsAllEnemiesSpawned)
+	{
+		stageClearTriggered = true;
+		stageClearTimer = 0.0f;
+	}
+
+	spawnTimer += DELTA;
+
+	if (spawnedEnemyCount < 15)
+	{
+		if (spawnTimer >= SPAWN_INTERVAL)
+		{
+			spawnTimer = 0.0f;
+
+			if (SpawnEnemy())
+			{
+				spawnedEnemyCount++;
+			}
+
+			if (spawnedEnemyCount >= 15)
+			{
+				IsAllEnemiesSpawned = true;
+			}
+		}
+	}
+
+	if (stageClearTriggered)
+	{
+		stageClearTimer += DELTA;
+
+		if (stageClearTimer >= 2.0f)
+		{
+			allEnemiesCleared = true;
+			SCENE->ChangeScene("Title");
+		}
 	}
 }
 
@@ -131,7 +207,7 @@ void EnemyManager::Render(HDC hdc)
 	}
 }
 
-void EnemyManager::SpawnEnemy()
+bool EnemyManager::SpawnEnemy()
 {
 	int randomX = rand() % SCREEN_WIDTH;
 
@@ -139,14 +215,14 @@ void EnemyManager::SpawnEnemy()
 	{
 		if (!enemy->IsActive())
 		{
-			enemy->Spawn({(float)randomX, 0 });
-			enemyCount++;
-			break;
+			enemy->Spawn({ (float)randomX, 0 });
+			return true; 
 		}
 	}
+	return false;
 }
 
-void EnemyManager::SpawnEnemy2()
+bool EnemyManager::SpawnEnemy2()
 {
 	int randomX = rand() % SCREEN_WIDTH;
 
@@ -154,14 +230,14 @@ void EnemyManager::SpawnEnemy2()
 	{
 		if (!enemy->IsActive())
 		{
-			enemy->Spawn2({ (float)randomX, 0 });
-			enemyCount++;
-			break;
+			enemy->Spawn({ (float)randomX, 0 });
+			return true;
 		}
 	}
+	return false;
 }
 
-void EnemyManager::SpawnEnemy3()
+bool EnemyManager::SpawnEnemy3()
 {
 	int randomX = rand() % SCREEN_WIDTH;
 
@@ -169,11 +245,11 @@ void EnemyManager::SpawnEnemy3()
 	{
 		if (!enemy->IsActive())
 		{
-			enemy->Spawn3({ (float)randomX, 0 });
-			enemyCount++;
-			break;
+			enemy->Spawn({ (float)randomX, 0 });
+			return true;
 		}
 	}
+	return false;
 }
 
 void EnemyManager::SetPlayer(Player* player)

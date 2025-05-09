@@ -17,13 +17,14 @@ public:
 	void Update3();
 	void Render(HDC hdc);
 
-	void SpawnEnemy();
-	void SpawnEnemy2();
-	void SpawnEnemy3();
+	bool SpawnEnemy();
+	bool SpawnEnemy2();
+	bool SpawnEnemy3();
 
 	void SetPlayer(Player* player);
 	void SetEnemyCount(int count) { enemyCount = count; }
 	bool AreAllEnemiesDead();
+
 
 	RECT rect;
 
@@ -31,9 +32,12 @@ private:
 	vector<Enemy*> enemies;
 	float spawnTimer = 0.0f;
 	int enemyCount = 0;
+	int spawnedEnemyCount = 0;
 
 	const float spawnInterval = 2.0f;
 	bool allEnemiesCleared = false;
 	bool stageClearTriggered = false;
+	bool IsAllEnemiesSpawned = false;
+
 	float stageClearTimer = 0.0f;
 };
