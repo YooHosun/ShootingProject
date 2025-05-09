@@ -90,7 +90,18 @@ void Enemy::Fire()
 	{
 		fireTimer = 0.0f;
 
-		Vector2 direction = player->GetCenter() - center;
-		BulletManager::Get()->Fire(center, "Enemy", direction);
+		float stepAngle = PI * 2.0f / FIRE_COUNT;
+
+		for (int i = 0; i < FIRE_COUNT; i++)
+		{
+			float angle = stepAngle * i;
+			Vector2 direction(cos(angle), sin(angle));
+			BulletManager::Get()->Fire(center, "Enemy", direction);
+		}
+
+		//Vector2 direction = player->GetCenter() - center;
+		//BulletManager::Get()->Fire(center, "Enemy", direction);
+
+
 	}
 }

@@ -131,7 +131,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Framework.h" />
-    <ClInclude Include="Framework\GameManager.h" />
+    <ClInclude Include="Framework\Manager\GameManager.h" />
+    <ClInclude Include="Framework\Manager\SceneManager.h" />
     <ClInclude Include="Framework\Math\Vector2.h" />
     <ClInclude Include="Framework\Utilities\Input.h" />
     <ClInclude Include="Framework\Utilities\Singleton.h" />
@@ -144,8 +145,12 @@
     <ClInclude Include="Objects\PaintTool.h" />
     <ClInclude Include="Objects\Player.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="Scenes\MenuScene.h" />
     <ClInclude Include="Scenes\Scene.h" />
-    <ClInclude Include="Scenes\ShootingScene.h" />
+    <ClInclude Include="Scenes\Stage1Scene.h" />
+    <ClInclude Include="Scenes\Stage2Scene.h" />
+    <ClInclude Include="Scenes\Stage3Scene.h" />
+    <ClInclude Include="Scenes\TitleScene.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="WinAPI_2504.h" />
   </ItemGroup>
@@ -153,7 +158,8 @@
     <ClCompile Include="Framework.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Framework\GameManager.cpp" />
+    <ClCompile Include="Framework\Manager\GameManager.cpp" />
+    <ClCompile Include="Framework\Manager\SceneManager.cpp" />
     <ClCompile Include="Framework\Utilities\Input.cpp" />
     <ClCompile Include="Framework\Utilities\Timer.cpp" />
     <ClCompile Include="Objects\Bullet.cpp" />
@@ -163,7 +169,11 @@
     <ClCompile Include="Objects\EnemyManager.cpp" />
     <ClCompile Include="Objects\PaintTool.cpp" />
     <ClCompile Include="Objects\Player.cpp" />
-    <ClCompile Include="Scenes\ShootingScene.cpp" />
+    <ClCompile Include="Scenes\MenuScene.cpp" />
+    <ClCompile Include="Scenes\Stage1Scene.cpp" />
+    <ClCompile Include="Scenes\Stage2Scene.cpp" />
+    <ClCompile Include="Scenes\Stage3Scene.cpp" />
+    <ClCompile Include="Scenes\TitleScene.cpp" />
     <ClCompile Include="WinAPI_2504.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -21,8 +21,10 @@ public:
 	bool IsKeyUp(int key) const { return mapState[key] == Up; }
 	bool IsKeyPress(int key) const { return mapState[key] == Press; }
 
+
 private:
 	BYTE curState[KEY_MAX] = {};
 	BYTE oldState[KEY_MAX] = {};
 	KeyState mapState[KEY_MAX] = {};
+
 };

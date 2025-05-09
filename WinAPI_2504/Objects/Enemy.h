@@ -7,6 +7,7 @@ private:
 	const int MAX_HP = 30;
 	const float DAMAGE_INTERVAL = 0.1f;
 	const float FIRE_INTERVAL = 1.0f;
+	const int FIRE_COUNT = 10;
 
 public:
 	Enemy();

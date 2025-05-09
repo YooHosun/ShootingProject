@@ -39,7 +39,7 @@ void Player::Fire()
 
 void Player::ControlFire()
 {
-	if (Player::Get()->IsKeyDown(VK_LBUTTON))
+	if (Input::Get()->IsKeyDown(VK_LBUTTON))
 	{
 		Fire();	
 	}

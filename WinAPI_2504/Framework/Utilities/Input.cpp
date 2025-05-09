@@ -26,3 +26,5 @@ void Input::Update()
 			mapState[i] = None;
 	}
 }
+
+

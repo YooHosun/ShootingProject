@@ -9,6 +9,7 @@
 #define PI 3.141592f
 
 #define DELTA Timer::Get()->GetElapsedTime()
+#define SCENE SceneManager::Get()
 
 #include <windows.h>
 #include <string>
@@ -32,7 +33,8 @@ using namespace std;
 #include "Objects/EnemyManager.h"
 
 #include "Scenes/Scene.h"
-#include "Framework/GameManager.h"
+#include "Framework/Manager/SceneManager.h"
+#include "Framework/Manager/GameManager.h"
 
 extern HWND hWnd;
 extern Vector2 mousePos;

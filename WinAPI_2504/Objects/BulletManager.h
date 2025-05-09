@@ -5,7 +5,7 @@ class BulletManager : public Singleton<BulletManager>
 	friend class Singleton;
 
 private:
-	const int BULLET_POOL_SIZE = 50;	
+	const int BULLET_POOL_SIZE = 200;	
 
 private:
 	BulletManager();
