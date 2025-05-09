@@ -45,6 +45,9 @@ public:
 	void Render(HDC hdc);
 
 	void Spawn(Vector2 pos);
+	void Spawn2(Vector2 pos);
+	void Spawn3(Vector2 pos);
+
 
 	void SetPlayer(Player* player) { this->player = player; }
 

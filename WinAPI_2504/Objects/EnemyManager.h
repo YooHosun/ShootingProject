@@ -13,11 +13,16 @@ private:
 
 public:
 	void Update();
+	void Update2();
+	void Update3();
 	void Render(HDC hdc);
 
 	void SpawnEnemy();
+	void SpawnEnemy2();
+	void SpawnEnemy3();
 
 	void SetPlayer(Player* player);
+	void SetEnemyCount(int count) { enemyCount = count; }
 
 private:
 	vector<Enemy*> enemies;

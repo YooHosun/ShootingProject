@@ -65,20 +65,60 @@ void Enemy::Spawn(Vector2 pos)
 {
 	center = pos;
 	pivotCenter = pos;
-	pivotDir = Vector2::Down();  // 기본은 아래로
 	pivotAngle = 0.0f;
 	pivotRadius = 50.0f;
 	pivotSpeed = 5.0f;
-
 	center = pos;
 	isActive = true;
-	hSelectBrush = hBlueBrush;
-	hp = MAX_HP;
+	//hSelectBrush = hBlueBrush;
 	isDamaged = false;
+
+	color = EnemyColor::Green;
+	shootingType = EnemyShootingType::Single;
+	moveType = EnemyMoveType::Linear;
+	pivotDir = Vector2::Down();  // 기본은 아래로
+	hp = 20;
+	//direction = Vector2::Down();
+}
+
+void Enemy::Spawn2(Vector2 pos)
+{
+	center = pos;
+	pivotCenter = pos;
+	pivotAngle = 0.0f;
+	pivotRadius = 50.0f;
+	pivotSpeed = 5.0f;
+	center = pos;
+	isActive = true;
+	//hSelectBrush = hBlueBrush;
+	isDamaged = false;
+
+	color = EnemyColor::Red;
+	shootingType = EnemyShootingType::Spread;
+	moveType = EnemyMoveType::Circular;
+	pivotDir = Vector2::Down();  // 기본은 아래로
+	hp = MAX_HP;
+	//direction = Vector2::Down();
+}
+
+void Enemy::Spawn3(Vector2 pos)
+{
+	center = pos;
+	pivotCenter = pos;
+	pivotAngle = 0.0f;
+	pivotRadius = 50.0f;
+	pivotSpeed = 5.0f;
+	center = pos;
+	isActive = true;
+	//hSelectBrush = hBlueBrush;
+	isDamaged = false;
+
 	color = EnemyColor::Cyan;
 	shootingType = EnemyShootingType::Wave;
 	moveType = EnemyMoveType::Sine;
-	direction = Vector2::Down();
+	pivotDir = Vector2::Down();  // 기본은 아래로
+	hp = MAX_HP;
+	//direction = Vector2::Down();
 }
 
 void Enemy::Damage()
