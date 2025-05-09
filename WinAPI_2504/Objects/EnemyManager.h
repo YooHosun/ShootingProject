@@ -22,4 +22,5 @@ public:
 private:
 	vector<Enemy*> enemies;
 	float spawnTimer = 0.0f;
+	int enemyCount = 0;
 };

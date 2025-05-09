@@ -34,8 +34,11 @@ void EnemyManager::Update()
 
 	if (spawnTimer >= SPAWN_INTERVAL)
 	{
-		spawnTimer = 0.0f;
-		SpawnEnemy();
+		if (enemyCount < 5) // 최대 적 수
+		{
+			spawnTimer = 0.0f;
+			SpawnEnemy();
+		}
 	}
 
 	for (Enemy*& enemy : enemies)
@@ -61,6 +64,7 @@ void EnemyManager::SpawnEnemy()
 		if (!enemy->IsActive())
 		{
 			enemy->Spawn({(float)randomX, 0 });
+			enemyCount++;
 			break;
 		}
 	}
