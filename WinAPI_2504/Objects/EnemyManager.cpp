@@ -45,6 +45,32 @@ void EnemyManager::Update()
 	{
 		enemy->Update();
 	}
+
+	int aliveCount = 0;
+	for (Enemy* enemy : enemies)
+	{
+		if (enemy->IsActive())
+			aliveCount++;
+	}
+	enemyCount = aliveCount;
+
+	if (enemyCount == 0 && !stageClearTriggered)
+	{
+		stageClearTriggered = true;
+		stageClearTimer = 0.0f;
+	}
+
+
+	if (stageClearTriggered)
+	{
+		stageClearTimer += DELTA;
+
+		if (stageClearTimer >= 2.0f)
+		{
+			allEnemiesCleared = true;
+			SCENE->ChangeScene("Game2");
+		}
+	}
 }
 
 void EnemyManager::Update2()
@@ -90,6 +116,18 @@ void EnemyManager::Render(HDC hdc)
 	for (Enemy*& enemy : enemies)
 	{
 		enemy->Render(hdc);
+	}
+
+	if (stageClearTriggered && stageClearTimer < 2.0f)
+	{
+		wstring clearText = L"Stage Clear!";
+
+		rect.left = 0;
+		rect.top = SCREEN_HEIGHT / 2 - 50;
+		rect.right = SCREEN_WIDTH;
+		rect.bottom = rect.top + 100;
+
+		DrawText(hdc, clearText.c_str(), -1, &rect, DT_CENTER);
 	}
 }
 
@@ -144,4 +182,16 @@ void EnemyManager::SetPlayer(Player* player)
 	{
 		enemy->SetPlayer(player);
 	}
+}
+
+bool EnemyManager::AreAllEnemiesDead()
+{
+	for (Enemy* enemy : enemies)
+	{
+		if (enemy->IsActive())
+		{
+			return false;
+		}
+	}
+	return true;
 }

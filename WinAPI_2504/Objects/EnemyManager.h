@@ -23,9 +23,17 @@ public:
 
 	void SetPlayer(Player* player);
 	void SetEnemyCount(int count) { enemyCount = count; }
+	bool AreAllEnemiesDead();
+
+	RECT rect;
 
 private:
 	vector<Enemy*> enemies;
 	float spawnTimer = 0.0f;
 	int enemyCount = 0;
+
+	const float spawnInterval = 2.0f;
+	bool allEnemiesCleared = false;
+	bool stageClearTriggered = false;
+	float stageClearTimer = 0.0f;
 };

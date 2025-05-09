@@ -34,7 +34,7 @@ void Stage2Scene::Update()
 	player->Update();
 
 	BulletManager::Get()->Update();
-	EnemyManager::Get()->Update();
+	EnemyManager::Get()->Update2();
 }
 
 void Stage2Scene::Render(HDC hdc)
