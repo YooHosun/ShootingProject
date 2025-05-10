@@ -47,9 +47,14 @@ public:
 	void Spawn(Vector2 pos);
 	void Spawn2(Vector2 pos);
 	void Spawn3(Vector2 pos);
+	void SpawnBoss(Vector2 pos);
 
+	void SingleFire();
+	void SpreadFire();
+	void WaveFire();
 
 	void SetPlayer(Player* player) { this->player = player; }
+	bool IsBoss() const { return isBossEnemy; }
 
 private:
 	void Damage();
@@ -62,7 +67,9 @@ private:
 	float damageTimer = 0;
 	float fireTimer = 0;
 	bool isDamaged = false;
+	bool isBossEnemy = false;
 
+	Vector2 firePos = {};
 	Vector2 pivotCenter;         // 기준 중심점 (회전, 사각, 웨이브 모두 사용)
 	Vector2 pivotDir = Vector2::Down(); // 중심의 이동 방향 (상하 or 좌우)
 	float pivotAngle = 0.0f;     // 회전 각도 (모든 타입 공용)
@@ -73,9 +80,14 @@ private:
 	int waveShotCount = 0;
 	float waveFireTimer = 0.0f;
 	float waveBaseAngle = 0.0f;
+	float fireTimerSingle = 0.0f;
+	float fireTimerSpread = 0.0f;
+	float waveStartTimer = 0.0f;
 
 	EnemyColor color;
 	EnemyShootingType shootingType;
+	EnemyShootingType shootingType2;
+	EnemyShootingType shootingType3;
 	EnemyMoveType moveType;
 
 	HBRUSH hRedBrush;
@@ -86,7 +98,7 @@ private:
 	HBRUSH hMagentaBrush;
 	HBRUSH hSelectBrush;
 
-	Player* player = nullptr;;
+	Player* player = nullptr;
 
 	Vector2 direction = Vector2::Up();
 };

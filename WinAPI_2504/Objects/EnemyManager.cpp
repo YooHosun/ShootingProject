@@ -57,7 +57,7 @@ void EnemyManager::Update()
 		{
 			spawnTimer = 0.0f;
 
-			if (SpawnEnemy()) 
+			if (SpawnEnemy())
 			{
 				spawnedEnemyCount++;
 			}
@@ -110,7 +110,7 @@ void EnemyManager::Update2()
 		{
 			spawnTimer = 0.0f;
 
-			if (SpawnEnemy())
+			if (SpawnEnemy2())
 			{
 				spawnedEnemyCount++;
 			}
@@ -136,11 +136,99 @@ void EnemyManager::Update2()
 
 void EnemyManager::Update3()
 {
+	//for (Enemy*& enemy : enemies)
+	//{
+	//	enemy->Update();
+	//}
+
+	//int aliveCount = 0;
+	//for (Enemy* enemy : enemies)
+	//{
+	//	if (enemy->IsActive())
+	//		aliveCount++;
+	//}
+	//enemyCount = aliveCount;
+
+	//if (enemyCount == 0 && !stageClearTriggered && IsAllEnemiesSpawned)
+	//{
+	//	stageClearTriggered = true;
+	//	stageClearTimer = 0.0f;
+	//}
+
+	//spawnTimer += DELTA;
+
+	//if (spawnedEnemyCount < 2)
+	//{
+	//	if (spawnTimer >= SPAWN_INTERVAL)
+	//	{
+	//		spawnTimer = 0.0f;
+
+	//		if (SpawnEnemy3())
+	//		{
+	//			spawnedEnemyCount++;
+	//		}
+
+	//		if (spawnedEnemyCount >= 2)
+	//		{
+	//			IsAllEnemiesSpawned = true;
+	//		}
+	//	}
+	//}
+
+	//// 4. 일반 적 모두 제거 후 → 보스 등장 준비
+	//if (enemyCount == 0 && !stageClearTriggered && IsAllEnemiesSpawned)
+	//{
+	//	stageClearTriggered = true;
+	//	stageClearTimer = 0.0f;
+	//}
+
+	//// 5. 보스 등장
+	//if (stageClearTriggered && !isBossSpawned)
+	//{
+	//	boss = new Boss();
+	//	boss->Spawn({ SCREEN_WIDTH / 2.0f, 150.0f });
+	//	isBossSpawned = true;
+	//}
+
+	//// 6. 보스 업데이트
+	//if (isBossSpawned && boss && !isBossDefeated)
+	//{
+	//	boss->Update();
+
+	//	if (!boss->IsActive()) {
+	//		isBossDefeated = true;
+	//		stageClearTimer = 0.0f;
+	//	}
+	//}
+
+	//// 7. 보스 죽은 뒤 씬 전환
+	//if (isBossDefeated)
+	//{
+	//	stageClearTimer += DELTA;
+
+	//	if (stageClearTimer >= 2.0f)
+	//	{
+	//		SCENE->ChangeScene("Title");
+	//	}
+	//}
+
+	///*if (stageClearTriggered)
+	//{
+	//	stageClearTimer += DELTA;
+
+	//	if (stageClearTimer >= 2.0f)
+	//	{
+	//		allEnemiesCleared = true;
+	//		SCENE->ChangeScene("Title");
+	//	}
+	//}*/
+
 	for (Enemy*& enemy : enemies)
 	{
 		enemy->Update();
 	}
 
+	// 현재 살아있는 적 개수 계산
 	int aliveCount = 0;
 	for (Enemy* enemy : enemies)
 	{
@@ -149,39 +237,49 @@ void EnemyManager::Update3()
 	}
 	enemyCount = aliveCount;
 
-	if (enemyCount == 0 && !stageClearTriggered && IsAllEnemiesSpawned)
-	{
-		stageClearTriggered = true;
-		stageClearTimer = 0.0f;
-	}
-
+	// 일반 적 스폰
 	spawnTimer += DELTA;
-
-	if (spawnedEnemyCount < 15)
+	if (spawnedEnemyCount < 2)
 	{
 		if (spawnTimer >= SPAWN_INTERVAL)
 		{
 			spawnTimer = 0.0f;
 
-			if (SpawnEnemy())
+			if (SpawnEnemy3())
 			{
 				spawnedEnemyCount++;
 			}
 
-			if (spawnedEnemyCount >= 15)
+			if (spawnedEnemyCount >= 2)
 			{
 				IsAllEnemiesSpawned = true;
 			}
 		}
 	}
 
-	if (stageClearTriggered)
-	{
-		stageClearTimer += DELTA;
+	if (!isBossSpawned && enemyCount == 0 && IsAllEnemiesSpawned) {
+		for (Enemy*& enemy : enemies) {
+			if (!enemy->IsActive()) {
+				enemy->SpawnBoss({ SCREEN_WIDTH / 2.0f, 150.0f });
+				bossEnemy = enemy;
+				isBossSpawned = true;
+				break;
+			}
+		}
+	}
 
-		if (stageClearTimer >= 2.0f)
-		{
-			allEnemiesCleared = true;
+	// 보스 생존 여부 체크
+	if (isBossSpawned && bossEnemy && !bossEnemy->IsActive()) {
+		if (!isBossDefeated) {
+			isBossDefeated = true;
+			stageClearTimer = 0.0f;
+		}
+	}
+
+	// 씬 전환 처리 추가
+	if (isBossDefeated) {
+		stageClearTimer += DELTA;
+		if (stageClearTimer >= 2.0f) {
 			SCENE->ChangeScene("Title");
 		}
 	}
@@ -194,7 +292,10 @@ void EnemyManager::Render(HDC hdc)
 		enemy->Render(hdc);
 	}
 
-	if (stageClearTriggered && stageClearTimer < 2.0f)
+	/*if (isBossSpawned && boss && boss->IsActive())
+		boss->Render(hdc);*/
+
+	if (stageClearTriggered && stageClearTimer < 2.0f && !isBossSpawned)
 	{
 		wstring clearText = L"Stage Clear!";
 
@@ -216,7 +317,7 @@ bool EnemyManager::SpawnEnemy()
 		if (!enemy->IsActive())
 		{
 			enemy->Spawn({ (float)randomX, 0 });
-			return true; 
+			return true;
 		}
 	}
 	return false;
@@ -230,7 +331,7 @@ bool EnemyManager::SpawnEnemy2()
 	{
 		if (!enemy->IsActive())
 		{
-			enemy->Spawn({ (float)randomX, 0 });
+			enemy->Spawn2({ (float)randomX, 0 });
 			return true;
 		}
 	}
@@ -245,7 +346,7 @@ bool EnemyManager::SpawnEnemy3()
 	{
 		if (!enemy->IsActive())
 		{
-			enemy->Spawn({ (float)randomX, 0 });
+			enemy->Spawn3({ (float)randomX, 0 });
 			return true;
 		}
 	}

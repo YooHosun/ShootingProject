@@ -33,33 +33,83 @@ void Enemy::Render(HDC hdc)
 {
 	if (!isActive) return;
 
+	// 보스 전용 외형 렌더링
+	if (isBossEnemy)
+	{
+		int r = radius;
+		int cx = (int)center.x;
+		int cy = (int)center.y;
+
+		HPEN hPen = CreatePen(PS_SOLID, 5, RGB(128, 128, 128));
+		HPEN defaultPen = (HPEN)SelectObject(hdc, hPen);
+
+		// 중심 정사각형
+		MoveToEx(hdc, cx - r, cy - r, nullptr);
+		LineTo(hdc, cx + r, cy - r);
+		LineTo(hdc, cx + r, cy + r);
+		LineTo(hdc, cx - r, cy + r);
+		LineTo(hdc, cx - r, cy - r);
+
+		// 왼쪽 날개
+		MoveToEx(hdc, cx - r, cy - r, nullptr);
+		LineTo(hdc, cx - r * 3, cy - r);
+		LineTo(hdc, cx - r, cy + r);
+		LineTo(hdc, cx - r, cy - r);
+
+		// 오른쪽 날개
+		MoveToEx(hdc, cx + r, cy - r, nullptr);
+		LineTo(hdc, cx + r * 3, cy - r);
+		LineTo(hdc, cx + r, cy + r);
+		LineTo(hdc, cx + r, cy - r);
+
+		// 머리
+		MoveToEx(hdc, cx - r, cy + r, nullptr);
+		LineTo(hdc, cx + r, cy + r);
+		LineTo(hdc, cx, cy + r * 3);
+		LineTo(hdc, cx - r, cy + r);
+
+		// 왼쪽 포대
+		int gunW = r / 4;
+		int gunH = r / 2;
+		int gx = cx - r;
+		int gy = cy - r;
+
+		MoveToEx(hdc, gx, gy, nullptr);
+		LineTo(hdc, gx - gunW, gy);
+		LineTo(hdc, gx - gunW, gy - gunH);
+		LineTo(hdc, gx, gy - gunH);
+		LineTo(hdc, gx, gy);
+
+		// 오른쪽 포대
+		gx = cx + r;
+		gy = cy - r;
+
+		MoveToEx(hdc, gx, gy, nullptr);
+		LineTo(hdc, gx + gunW, gy);
+		LineTo(hdc, gx + gunW, gy - gunH);
+		LineTo(hdc, gx, gy - gunH);
+		LineTo(hdc, gx, gy);
+
+		SelectObject(hdc, defaultPen);
+		DeleteObject(hPen);
+		return;
+	}
+
+	// 기본 원형 적 렌더링
 	switch (color) {
-	case EnemyColor::Red:
-		hSelectBrush = hRedBrush;
-		break;
-	case EnemyColor::Green:
-		hSelectBrush = hGreenBrush;
-		break;
-	case EnemyColor::Blue:
-		hSelectBrush = hBlueBrush;
-		break;
-	case EnemyColor::Yellow:
-		hSelectBrush = hYellowBrush;
-		break;
-	case EnemyColor::Cyan:
-		hSelectBrush = hCyanBrush;
-		break;
-	case EnemyColor::Magenta:
-		hSelectBrush = hMagentaBrush;
-		break;
+	case EnemyColor::Red: hSelectBrush = hRedBrush; break;
+	case EnemyColor::Green: hSelectBrush = hGreenBrush; break;
+	case EnemyColor::Blue: hSelectBrush = hBlueBrush; break;
+	case EnemyColor::Yellow: hSelectBrush = hYellowBrush; break;
+	case EnemyColor::Cyan: hSelectBrush = hCyanBrush; break;
+	case EnemyColor::Magenta: hSelectBrush = hMagentaBrush; break;
 	}
 
 	HBRUSH defaultBrush = (HBRUSH)SelectObject(hdc, hSelectBrush);
-
 	Circle::Render(hdc);
-
 	SelectObject(hdc, defaultBrush);
 }
+
 
 void Enemy::Spawn(Vector2 pos)
 {
@@ -121,6 +171,24 @@ void Enemy::Spawn3(Vector2 pos)
 	//direction = Vector2::Down();
 }
 
+void Enemy::SpawnBoss(Vector2 pos)
+{
+	center = pos;
+	isActive = true;
+	isDamaged = false;
+
+	isBossEnemy = true;
+	radius = 40;  // 보스 크기 약간 키우기
+	color = EnemyColor::Green; // 의미 없음
+	hp = 200;
+
+	shootingType = EnemyShootingType::Single;
+	shootingType2 = EnemyShootingType::Spread;
+	shootingType3 = EnemyShootingType::Wave;
+	moveType = EnemyMoveType::Linear;
+	direction = Vector2::Right(); // 좌우 왕복
+}
+
 void Enemy::Damage()
 {
 	if (isDamaged)
@@ -152,21 +220,31 @@ void Enemy::Damage()
 
 void Enemy::Move()
 {
-	//center.y += SPEED * DELTA;
-
-	/*if (center.y > SCREEN_HEIGHT)
-	{
-		isActive = false;
-	}*/
-	//direction.Normalize();
-
 	switch (moveType)
 	{
 	case EnemyMoveType::Linear:
 		center += direction * SPEED * DELTA;
-		if (center.y > SCREEN_HEIGHT || center.y < 0)
+		if (isBossEnemy)
 		{
-			direction *= -1;
+			float limit = radius * 3; // 보스는 본체 + 날개 크기 고려
+			if (center.x < limit)
+			{
+				center.x = limit;
+				direction *= -1;
+			}
+			else if (center.x > SCREEN_WIDTH - limit)
+			{
+				center.x = SCREEN_WIDTH - limit;
+				direction *= -1;
+			}
+		}
+		else
+		{
+			// 일반 적 상하 이동
+			if (center.y > SCREEN_HEIGHT || center.y < 0)
+			{
+				direction *= -1;
+			}
 		}
 		break;
 	case EnemyMoveType::Circular:
@@ -222,30 +300,48 @@ void Enemy::Move()
 	}
 }
 
-//void Enemy::Fire()
-//{
-//	fireTimer += DELTA;
-//
-//	if (fireTimer >= FIRE_INTERVAL)
-//	{
-//		fireTimer = 0.0f;
-//
-//		float stepAngle = PI * 2.0f / FIRE_COUNT;
-//
-//		for (int i = 0; i < FIRE_COUNT; i++)
-//		{
-//			float angle = stepAngle * i;
-//			Vector2 direction(cos(angle), sin(angle));
-//			BulletManager::Get()->Fire(center, "Enemy", direction);
-//		}
-//
-//		//Vector2 direction = player->GetCenter() - center;
-//		//BulletManager::Get()->Fire(center, "Enemy", direction);
-//	}
-//}
-
 void Enemy::Fire()
 {
+	if (isBossEnemy)
+	{
+		// 각각 독립 타이머
+		fireTimerSingle += DELTA;
+		fireTimerSpread += DELTA;
+		waveStartTimer += DELTA;
+
+		// Single 발사
+		if (fireTimerSingle >= FIRE_INTERVAL / 5.0f)
+		{
+			fireTimerSingle = 0.0f;
+			SingleFire();
+		}
+
+		// Spread 발사
+		if (fireTimerSpread >= FIRE_INTERVAL / 2.0f)
+		{
+			fireTimerSpread = 0.0f;
+			SpreadFire();
+		}
+
+		// Wave 시작
+		if (!isWaveFiring && waveStartTimer >= FIRE_INTERVAL * 2.0f)
+		{
+			isWaveFiring = true;
+			waveShotCount = 0;
+			waveFireTimer = 0.0f;
+			waveStartTimer = 0.0f;
+
+			Vector2 toPlayer = player->GetCenter() - center;
+			waveBaseAngle = atan2(toPlayer.y, toPlayer.x);
+		}
+
+		// Wave 연속 처리
+		WaveFire();
+
+		return;
+	}
+
+	// 일반 적 처리
 	fireTimer += DELTA;
 
 	switch (shootingType)
@@ -254,10 +350,7 @@ void Enemy::Fire()
 		if (fireTimer >= FIRE_INTERVAL)
 		{
 			fireTimer = 0.0f;
-
-			Vector2 toPlayer = player->GetCenter() - center;
-			toPlayer.Normalize();
-			BulletManager::Get()->Fire(center, "Enemy", toPlayer);
+			SingleFire();
 		}
 		break;
 
@@ -265,60 +358,73 @@ void Enemy::Fire()
 		if (fireTimer >= FIRE_INTERVAL)
 		{
 			fireTimer = 0.0f;
-
-			float stepAngle = PI * 2.0f / FIRE_COUNT;
-			for (int i = 0; i < FIRE_COUNT; i++)
-			{
-				float angle = stepAngle * i;
-				Vector2 direction(cos(angle), sin(angle));
-				BulletManager::Get()->Fire(center, "Enemy", direction);
-			}
+			SpreadFire();
 		}
 		break;
 
 	case EnemyShootingType::Wave:
-		// 첫 발사 시작
 		if (!isWaveFiring && fireTimer >= FIRE_INTERVAL)
 		{
 			isWaveFiring = true;
 			waveShotCount = 0;
+			waveFireTimer = 0.0f;
 			fireTimer = 0.0f;
 
 			Vector2 toPlayer = player->GetCenter() - center;
 			waveBaseAngle = atan2(toPlayer.y, toPlayer.x);
 		}
 
-		// 연속 5발씩 4번 발사 (시간차 적용)
-		if (isWaveFiring)
-		{
-			waveFireTimer += DELTA;
-
-			if (waveFireTimer >= 0.15f && waveShotCount < 4) // 0.15초 간격으로 4세트 발사
-			{
-				waveFireTimer = 0.0f;
-
-				const int shotsPerWave = 5;
-				float spread = PI / 6.0f; // 부채꼴 범위: ±15도
-
-				for (int i = 0; i < shotsPerWave; i++)
-				{
-					float offset = spread * ((float)i / (shotsPerWave - 1) - 0.5f); // -0.5 ~ +0.5
-					float angle = waveBaseAngle + offset;
-					Vector2 dir(cos(angle), sin(angle));
-					BulletManager::Get()->Fire(center, "Enemy", dir);
-				}
-
-				waveShotCount++;
-
-				if (waveShotCount >= 4)
-				{
-					isWaveFiring = false;
-					waveFireTimer = 0.0f;
-					fireTimer = 0.0f;
-				}
-			}
-		}
+		WaveFire();
 		break;
+	}
+}
+
+void Enemy::SingleFire()
+{
+	Vector2 toPlayer = player->GetCenter() - center;
+	toPlayer.Normalize();
+	BulletManager::Get()->Fire(center, "Enemy", toPlayer);
+}
+
+void Enemy::SpreadFire()
+{
+	float stepAngle = PI * 2.0f / FIRE_COUNT;
+	for (int i = 0; i < FIRE_COUNT; i++)
+	{
+		float angle = stepAngle * i;
+		Vector2 direction(cos(angle), sin(angle));
+		BulletManager::Get()->Fire(center, "Enemy", direction);
+	}
+}
+
+void Enemy::WaveFire()
+{
+	if (!isWaveFiring) return;
+
+	waveFireTimer += DELTA;
+
+	if (waveFireTimer >= 0.15f && waveShotCount < 4)
+	{
+		waveFireTimer = 0.0f;
+
+		const int shotsPerWave = 5;
+		float spread = PI / 6.0f;
+
+		for (int i = 0; i < shotsPerWave; i++)
+		{
+			float offset = spread * ((float)i / (shotsPerWave - 1) - 0.5f);
+			float angle = waveBaseAngle + offset;
+			Vector2 dir(cos(angle), sin(angle));
+			BulletManager::Get()->Fire(center, "Enemy", dir);
+		}
+
+		waveShotCount++;
+
+		if (waveShotCount >= 4)
+		{
+			isWaveFiring = false;
+			waveFireTimer = 0.0f;
+		}
 	}
 }
 

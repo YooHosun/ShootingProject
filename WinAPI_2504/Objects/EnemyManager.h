@@ -40,4 +40,7 @@ private:
 	bool IsAllEnemiesSpawned = false;
 
 	float stageClearTimer = 0.0f;
+	bool isBossSpawned = false;
+	bool isBossDefeated = false;
+	Enemy* bossEnemy = nullptr;
 };
