@@ -29,4 +29,5 @@ private:
     Player* player;
 
     vector<Card> cards;
+    string GetAbilityName(PlayerAbility ability);
 };

@@ -2,21 +2,31 @@
 #include "SkillCardScene.h"
 #include "Objects/Player.h"
 
+
 SkillCardScene::SkillCardScene()
 {
-    // 왼쪽 카드
+    vector<PlayerAbility> allAbilities = {
+        PlayerAbility::TripleShot,
+        PlayerAbility::DoubleShot,
+        PlayerAbility::RLShot,
+        PlayerAbility::BackShot
+    };
+
+    shuffle(allAbilities.begin(), allAbilities.end(), default_random_engine((unsigned int)time(nullptr)));
+
+    PlayerAbility first = allAbilities[0];
+    PlayerAbility second = allAbilities[1];
+
     Card left;
     left.rect = { 60, 300, SCREEN_WIDTH / 2, SCREEN_HEIGHT - 300 };
-    left.name = "Triple Shot";
-    left.ability = PlayerAbility::TripleShot;
+    left.name = GetAbilityName(first);
+    left.ability = first;
     cards.push_back(left);
 
-    // 오른쪽 카드
     Card right;
     right.rect = { SCREEN_WIDTH / 2 + 10, 300, SCREEN_WIDTH - 50, SCREEN_HEIGHT - 300 };
-    right.name = "Double Shot";
-    right.ability = PlayerAbility::DoubleShot;
-
+    right.name = GetAbilityName(second);
+    right.ability = second;
     cards.push_back(right);
 }
 
@@ -49,6 +59,18 @@ void SkillCardScene::Render(HDC hdc)
 
     SelectObject(hdc, oldBrush);
     DeleteObject(brush);
+}
+
+string SkillCardScene::GetAbilityName(PlayerAbility ability)
+{
+    switch (ability)
+    {
+    case PlayerAbility::TripleShot: return "Triple Shot";
+    case PlayerAbility::DoubleShot: return "Double Shot";
+    case PlayerAbility::RLShot:     return "RL Shot";
+    case PlayerAbility::BackShot:   return "Back Shot";
+    default:                        return "Unknown";
+    }
 }
 
 void SkillCardScene::Show(Player* p)

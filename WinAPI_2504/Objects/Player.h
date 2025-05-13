@@ -10,7 +10,9 @@ enum class PlayerAbility
 	None,
 	TripleShot,
 	DoubleShot,
-	BombShot
+	RLShot,
+	BackShot,
+	X2Shot
 };
 
 class Player : public Circle

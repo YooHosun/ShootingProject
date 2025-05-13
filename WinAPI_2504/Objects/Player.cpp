@@ -58,13 +58,28 @@ void Player::Fire()
 		break;
 	}
 
-	case PlayerAbility::BombShot:
+	case PlayerAbility::RLShot:
 	{
-		for (int i = 0; i < 8; i++)
-		{
+		BulletManager::Get()->Fire(firePos, "Player", direction);
+		BulletManager::Get()->Fire(firePos, "Player", direction + Vector2(-10.0f, 0));
+		BulletManager::Get()->Fire(firePos, "Player", direction + Vector2(10.0f, 0));
+		
+		break;
+	}
 
-			BulletManager::Get()->Fire(firePos, "Player", direction.GetRotated(i * (PI / 4)));
-		}
+	case PlayerAbility::BackShot:
+	{
+		BulletManager::Get()->Fire(firePos, "Player", direction);
+
+		BulletManager::Get()->Fire(firePos, "Player", direction.GetRotated(PI / 1));
+		
+		break;
+	}
+
+	case PlayerAbility::X2Shot:
+	{
+		BulletManager::Get()->Fire(firePos, "Player", direction);
+
 	}
 	default:
 
