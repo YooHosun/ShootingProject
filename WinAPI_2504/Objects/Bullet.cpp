@@ -17,3 +17,15 @@ void Bullet::Update()
         isActive = false;
     }
 }
+
+void Bullet::Render(HDC hdc)
+{
+    if (!isActive) return;
+    HBRUSH hBrush = CreateSolidBrush(color);
+    HBRUSH oldBrush = (HBRUSH)SelectObject(hdc, hBrush);
+
+    Ellipse(hdc, center.x - radius, center.y - radius, center.x + radius, center.y + radius);
+
+    SelectObject(hdc, oldBrush);
+    DeleteObject(hBrush);
+}

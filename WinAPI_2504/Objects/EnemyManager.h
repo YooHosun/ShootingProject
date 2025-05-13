@@ -24,13 +24,9 @@ public:
 
 public:
 	void Update();
-	//void Update2();
-	//void Update3();
 	void Render(HDC hdc);
 
 	bool SpawnEnemy(const EnemySpawnData& data);
-	//bool SpawnEnemy2();
-	//bool SpawnEnemy3();
 
 	void SetPlayer(Player* player);
 	void SetEnemyCount(int count) { enemyCount = count; }

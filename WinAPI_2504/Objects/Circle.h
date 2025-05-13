@@ -6,11 +6,11 @@ public:
 	Circle(int radius);
 	~Circle();
 
-	void Render(HDC hdc);
+	virtual void Render(HDC hdc);
 
 	bool IsCollisionPoint(POINT point);
 	bool IsCollisionCircle(Circle* circle);
-	
+
 
 	void SetCenter(float x, float y) { center = { x, y }; }
 	void SetCenter(Vector2 center) { this->center = center; }

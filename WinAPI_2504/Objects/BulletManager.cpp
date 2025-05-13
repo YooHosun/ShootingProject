@@ -2,17 +2,7 @@
 
 BulletManager::BulletManager()
 {
-	//bullet = new Bullet();	
-
-	//Reserve
-	//bullets.reserve(BULLET_POOL_SIZE);
-	//for (int i = 0; i < BULLET_POOL_SIZE; i++)
-	//{
-	//	Bullet* bullet = new Bullet();
-	//	bullets.push_back(bullet);
-	//}
-	//Resize
-	bullets.resize(BULLET_POOL_SIZE);//Bullet* bullets[50];
+	bullets.resize(BULLET_POOL_SIZE);
 	for (Bullet*& bullet : bullets)
 	{
 		bullet = new Bullet();
@@ -57,10 +47,6 @@ bool BulletManager::IsCollision(Circle* circle, string tag)
 		if (!bullet->IsCollisionCircle(circle))
 			continue;
 
-		//다운 캐스팅
-			//Enemy* enemy = (Enemy*)(circle);
-			//enemy->Damage();
-
 		bullet->SetActive(false);
 		return true;
 	}
@@ -68,7 +54,7 @@ bool BulletManager::IsCollision(Circle* circle, string tag)
 	return false;
 }
 
-void BulletManager::Fire(Vector2 pos, string tag, Vector2 direction)
+void BulletManager::Fire(Vector2 pos, string tag, Vector2 direction, COLORREF color)
 {
 	for (Bullet*& bullet : bullets)
 	{
@@ -76,6 +62,7 @@ void BulletManager::Fire(Vector2 pos, string tag, Vector2 direction)
 		{
 			bullet->Fire(pos, direction);
 			bullet->SetTag(tag);
+			bullet->SetColor(color);
 			break;
 		}
 	}

@@ -36,67 +36,13 @@ void Enemy::Render(HDC hdc)
 	// 보스 전용 외형 렌더링
 	if (isBossEnemy)
 	{
-		int r = radius;
-		int cx = (int)center.x;
-		int cy = (int)center.y;
-
-		HPEN hPen = CreatePen(PS_SOLID, 5, RGB(128, 128, 128));
-		HPEN defaultPen = (HPEN)SelectObject(hdc, hPen);
-
-		// 중심 정사각형
-		MoveToEx(hdc, cx - r, cy - r, nullptr);
-		LineTo(hdc, cx + r, cy - r);
-		LineTo(hdc, cx + r, cy + r);
-		LineTo(hdc, cx - r, cy + r);
-		LineTo(hdc, cx - r, cy - r);
-
-		// 왼쪽 날개
-		MoveToEx(hdc, cx - r, cy - r, nullptr);
-		LineTo(hdc, cx - r * 3, cy - r);
-		LineTo(hdc, cx - r, cy + r);
-		LineTo(hdc, cx - r, cy - r);
-
-		// 오른쪽 날개
-		MoveToEx(hdc, cx + r, cy - r, nullptr);
-		LineTo(hdc, cx + r * 3, cy - r);
-		LineTo(hdc, cx + r, cy + r);
-		LineTo(hdc, cx + r, cy - r);
-
-		// 머리
-		MoveToEx(hdc, cx - r, cy + r, nullptr);
-		LineTo(hdc, cx + r, cy + r);
-		LineTo(hdc, cx, cy + r * 3);
-		LineTo(hdc, cx - r, cy + r);
-
-		// 왼쪽 포대
-		int gunW = r / 4;
-		int gunH = r / 2;
-		int gx = cx - r;
-		int gy = cy - r;
-
-		MoveToEx(hdc, gx, gy, nullptr);
-		LineTo(hdc, gx - gunW, gy);
-		LineTo(hdc, gx - gunW, gy - gunH);
-		LineTo(hdc, gx, gy - gunH);
-		LineTo(hdc, gx, gy);
-
-		// 오른쪽 포대
-		gx = cx + r;
-		gy = cy - r;
-
-		MoveToEx(hdc, gx, gy, nullptr);
-		LineTo(hdc, gx + gunW, gy);
-		LineTo(hdc, gx + gunW, gy - gunH);
-		LineTo(hdc, gx, gy - gunH);
-		LineTo(hdc, gx, gy);
-
-		SelectObject(hdc, defaultPen);
-		DeleteObject(hPen);
+		BossRender(hdc);
 		return;
 	}
 
 	// 기본 원형 적 렌더링
-	switch (color) {
+	switch (color)
+	{
 	case EnemyColor::Red: hSelectBrush = hRedBrush; break;
 	case EnemyColor::Green: hSelectBrush = hGreenBrush; break;
 	case EnemyColor::Blue: hSelectBrush = hBlueBrush; break;
@@ -108,6 +54,66 @@ void Enemy::Render(HDC hdc)
 	HBRUSH defaultBrush = (HBRUSH)SelectObject(hdc, hSelectBrush);
 	Circle::Render(hdc);
 	SelectObject(hdc, defaultBrush);
+}
+
+void Enemy::BossRender(HDC hdc)
+{
+	int r = radius;
+	int cx = (int)center.x;
+	int cy = (int)center.y;
+
+	HPEN hPen = CreatePen(PS_SOLID, 5, RGB(128, 128, 128));
+	HPEN defaultPen = (HPEN)SelectObject(hdc, hPen);
+
+	// 중심 정사각형
+	MoveToEx(hdc, cx - r, cy - r, nullptr);
+	LineTo(hdc, cx + r, cy - r);
+	LineTo(hdc, cx + r, cy + r);
+	LineTo(hdc, cx - r, cy + r);
+	LineTo(hdc, cx - r, cy - r);
+
+	// 왼쪽 날개
+	MoveToEx(hdc, cx - r, cy - r, nullptr);
+	LineTo(hdc, cx - r * 3, cy - r);
+	LineTo(hdc, cx - r, cy + r);
+	LineTo(hdc, cx - r, cy - r);
+
+	// 오른쪽 날개
+	MoveToEx(hdc, cx + r, cy - r, nullptr);
+	LineTo(hdc, cx + r * 3, cy - r);
+	LineTo(hdc, cx + r, cy + r);
+	LineTo(hdc, cx + r, cy - r);
+
+	// 머리
+	MoveToEx(hdc, cx - r, cy + r, nullptr);
+	LineTo(hdc, cx + r, cy + r);
+	LineTo(hdc, cx, cy + r * 3);
+	LineTo(hdc, cx - r, cy + r);
+
+	// 왼쪽 포대
+	int gunW = r / 4;
+	int gunH = r / 2;
+	int gx = cx - r;
+	int gy = cy - r;
+
+	MoveToEx(hdc, gx, gy, nullptr);
+	LineTo(hdc, gx - gunW, gy);
+	LineTo(hdc, gx - gunW, gy - gunH);
+	LineTo(hdc, gx, gy - gunH);
+	LineTo(hdc, gx, gy);
+
+	// 오른쪽 포대
+	gx = cx + r;
+	gy = cy - r;
+
+	MoveToEx(hdc, gx, gy, nullptr);
+	LineTo(hdc, gx + gunW, gy);
+	LineTo(hdc, gx + gunW, gy - gunH);
+	LineTo(hdc, gx, gy - gunH);
+	LineTo(hdc, gx, gy);
+
+	SelectObject(hdc, defaultPen);
+	DeleteObject(hPen);
 }
 
 
@@ -128,47 +134,7 @@ void Enemy::Spawn(Vector2 pos, EnemyColor color, EnemyShootingType shootingType,
 	this->pivotDir = pivotDir;
 	this->hp = hp;
 }
-/*
-void Enemy::Spawn2(Vector2 pos)
-{
-	center = pos;
-	pivotCenter = pos;
-	pivotAngle = 0.0f;
-	pivotRadius = 50.0f;
-	pivotSpeed = 5.0f;
-	center = pos;
-	isActive = true;
-	//hSelectBrush = hBlueBrush;
-	isDamaged = false;
 
-	color = EnemyColor::Red;
-	shootingType = EnemyShootingType::Spread;
-	moveType = EnemyMoveType::Circular;
-	pivotDir = Vector2::Down();  // 기본은 아래로
-	hp = MAX_HP;
-	//direction = Vector2::Down();
-}
-
-void Enemy::Spawn3(Vector2 pos)
-{
-	center = pos;
-	pivotCenter = pos;
-	pivotAngle = 0.0f;
-	pivotRadius = 50.0f;
-	pivotSpeed = 5.0f;
-	center = pos;
-	isActive = true;
-	//hSelectBrush = hBlueBrush;
-	isDamaged = false;
-
-	color = EnemyColor::Cyan;
-	shootingType = EnemyShootingType::Wave;
-	moveType = EnemyMoveType::Sine;
-	pivotDir = Vector2::Down();  // 기본은 아래로
-	hp = MAX_HP;
-	//direction = Vector2::Down();
-}
-*/
 void Enemy::SpawnBoss(Vector2 pos)
 {
 	center = pos;
@@ -204,7 +170,6 @@ void Enemy::Damage()
 
 	if (BulletManager::Get()->IsCollision(this, "Player"))
 	{
-		//isActive = false;
 		hp -= 10;
 		isDamaged = true;
 		hSelectBrush = hRedBrush;
@@ -259,29 +224,6 @@ void Enemy::Move()
 		center.y = pivotCenter.y + sin(pivotAngle) * pivotRadius;
 		break;
 
-	case EnemyMoveType::Rectangular: // 이건 굳이 필요없을듯 움직임이 너무 어색함
-		// 중심 이동
-		pivotCenter += pivotDir * SPEED * DELTA;
-
-		// 방향 반전
-		if (pivotCenter.y > SCREEN_HEIGHT || pivotCenter.y < 0)
-			pivotDir *= -1;
-
-		// 사각 경로 회전 (0~4 * 90도)
-		pivotAngle += pivotSpeed * DELTA;
-
-		{
-			float segment = fmod(pivotAngle, 4.0f); // 0~4 구간
-			if (segment < 1.0f)
-				center = pivotCenter + Vector2(pivotRadius * (segment), -pivotRadius);
-			else if (segment < 2.0f)
-				center = pivotCenter + Vector2(pivotRadius, pivotRadius * (segment - 1.0f));
-			else if (segment < 3.0f)
-				center = pivotCenter + Vector2(pivotRadius * (1.0f - (segment - 2.0f)), pivotRadius);
-			else
-				center = pivotCenter + Vector2(-pivotRadius, pivotRadius * (1.0f - (segment - 3.0f)));
-		}
-		break;
 	case EnemyMoveType::Sine:
 		center += pivotDir * SPEED * DELTA;
 
@@ -381,22 +323,29 @@ void Enemy::SingleFire()
 {
 	Vector2 toPlayer = player->GetCenter() - center;
 	toPlayer.Normalize();
-	BulletManager::Get()->Fire(center, "Enemy", toPlayer);
+	COLORREF bulletColor;
+	bulletColor = RGB(255, 255, 128);
+	BulletManager::Get()->Fire(center, "Enemy", toPlayer, bulletColor);
 }
 
 void Enemy::SpreadFire()
 {
+	COLORREF bulletColor;
+	bulletColor = RGB(0, 128, 255);
 	float stepAngle = PI * 2.0f / FIRE_COUNT;
 	for (int i = 0; i < FIRE_COUNT; i++)
 	{
 		float angle = stepAngle * i;
 		Vector2 direction(cos(angle), sin(angle));
-		BulletManager::Get()->Fire(center, "Enemy", direction);
+		BulletManager::Get()->Fire(center, "Enemy", direction, bulletColor);
 	}
 }
 
 void Enemy::WaveFire()
 {
+	COLORREF bulletColor;
+	bulletColor = RGB(200, 128, 200);
+
 	if (!isWaveFiring) return;
 
 	waveFireTimer += DELTA;
@@ -413,7 +362,7 @@ void Enemy::WaveFire()
 			float offset = spread * ((float)i / (shotsPerWave - 1) - 0.5f);
 			float angle = waveBaseAngle + offset;
 			Vector2 dir(cos(angle), sin(angle));
-			BulletManager::Get()->Fire(center, "Enemy", dir);
+			BulletManager::Get()->Fire(center, "Enemy", dir, bulletColor);
 		}
 
 		waveShotCount++;

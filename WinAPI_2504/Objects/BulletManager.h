@@ -17,7 +17,7 @@ public:
 
 	bool IsCollision(Circle* circle, string tag);
 
-	void Fire(Vector2 pos, string tag, Vector2 direction = Vector2::Up());
+	void Fire(Vector2 pos, string tag, Vector2 direction = Vector2::Up(), COLORREF color = RGB(255, 255, 255));
 
 private:
 	vector<Bullet*> bullets;
