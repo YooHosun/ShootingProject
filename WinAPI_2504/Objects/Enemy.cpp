@@ -111,7 +111,7 @@ void Enemy::Render(HDC hdc)
 }
 
 
-void Enemy::Spawn(Vector2 pos)
+void Enemy::Spawn(Vector2 pos, EnemyColor color, EnemyShootingType shootingType, EnemyMoveType moveType, Vector2 pivotDir, int hp)
 {
 	center = pos;
 	pivotCenter = pos;
@@ -120,17 +120,15 @@ void Enemy::Spawn(Vector2 pos)
 	pivotSpeed = 5.0f;
 	center = pos;
 	isActive = true;
-	//hSelectBrush = hBlueBrush;
 	isDamaged = false;
 
-	color = EnemyColor::Green;
-	shootingType = EnemyShootingType::Single;
-	moveType = EnemyMoveType::Linear;
-	pivotDir = Vector2::Down();  // 기본은 아래로
-	hp = 20;
-	//direction = Vector2::Down();
+	this->color = color;
+	this->shootingType = shootingType;
+	this->moveType = moveType;
+	this->pivotDir = pivotDir;
+	this->hp = hp;
 }
-
+/*
 void Enemy::Spawn2(Vector2 pos)
 {
 	center = pos;
@@ -170,7 +168,7 @@ void Enemy::Spawn3(Vector2 pos)
 	hp = MAX_HP;
 	//direction = Vector2::Down();
 }
-
+*/
 void Enemy::SpawnBoss(Vector2 pos)
 {
 	center = pos;

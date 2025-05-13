@@ -35,7 +35,19 @@ void Stage3Scene::Update()
 	player->Update();
 
 	BulletManager::Get()->Update();
-	EnemyManager::Get()->Update3();
+	EnemyManager::Get()->Update();
+
+	if (EnemyManager::Get()->IsBossDefeated()) 
+		isBossDefeated = true;
+
+	if (isBossDefeated) 
+	{
+		stageClearTimer += DELTA;
+		if (stageClearTimer >= 2.0f) 
+		{
+			SCENE->ChangeScene("Title"); // Á÷Á¢ ¾À ÀüÈ¯
+		}
+	}
 }
 
 void Stage3Scene::Render(HDC hdc)
@@ -52,6 +64,7 @@ void Stage3Scene::Start()
 
 	BulletManager::Get();
 	EnemyManager::Get()->SetPlayer(player);
+	EnemyManager::Get()->SetStage(3);
 }
 
 void Stage3Scene::End()

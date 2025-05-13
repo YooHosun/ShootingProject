@@ -53,6 +53,7 @@ void Stage1Scene::Start()
 
 	BulletManager::Get();
 	EnemyManager::Get()->SetPlayer(player);
+	EnemyManager::Get()->SetStage(1);
 }
 
 void Stage1Scene::End()

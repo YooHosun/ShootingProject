@@ -10,19 +10,33 @@ private:
 private:
 	EnemyManager();
 	~EnemyManager();
+public:
+	struct EnemySpawnData
+	{
+		Enemy::EnemyColor color;
+		Enemy::EnemyShootingType shootingType;
+		Enemy::EnemyMoveType moveType;
+		Vector2 pivotDir;
+		int hp;
+		int spawnCount;
+		bool hasBoss;
+	};
 
 public:
 	void Update();
-	void Update2();
-	void Update3();
+	//void Update2();
+	//void Update3();
 	void Render(HDC hdc);
 
-	bool SpawnEnemy();
-	bool SpawnEnemy2();
-	bool SpawnEnemy3();
+	bool SpawnEnemy(const EnemySpawnData& data);
+	//bool SpawnEnemy2();
+	//bool SpawnEnemy3();
 
 	void SetPlayer(Player* player);
 	void SetEnemyCount(int count) { enemyCount = count; }
+	void SetStage(int stage) { currentStage = stage; }
+	bool IsBossDefeated() const { return isBossDefeated; }
+	void Reset();
 	bool AreAllEnemiesDead();
 
 
@@ -30,9 +44,11 @@ public:
 
 private:
 	vector<Enemy*> enemies;
+	std::unordered_map<int, EnemySpawnData> stageData;
 	float spawnTimer = 0.0f;
 	int enemyCount = 0;
 	int spawnedEnemyCount = 0;
+	int currentStage = 1;
 
 	const float spawnInterval = 2.0f;
 	bool allEnemiesCleared = false;

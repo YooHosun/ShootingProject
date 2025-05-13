@@ -14,4 +14,6 @@ public:
 
 private:
 	Player* player;
+	bool isBossDefeated = false;
+	float stageClearTimer = 0.0f;
 };

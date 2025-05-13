@@ -44,9 +44,9 @@ public:
 	void Update();
 	void Render(HDC hdc);
 
-	void Spawn(Vector2 pos);
-	void Spawn2(Vector2 pos);
-	void Spawn3(Vector2 pos);
+	void Spawn(Vector2 pos, EnemyColor color, EnemyShootingType shootingType, EnemyMoveType moveType, Vector2 pivotDir, int hp);
+	//void Spawn2(Vector2 pos);
+	//void Spawn3(Vector2 pos);
 	void SpawnBoss(Vector2 pos);
 
 	void SingleFire();
