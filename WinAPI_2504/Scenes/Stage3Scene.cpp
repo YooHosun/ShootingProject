@@ -3,12 +3,12 @@
 
 Stage3Scene::Stage3Scene()
 {
-
+	skillCardScene = new SkillCardScene();
 }
 
 Stage3Scene::~Stage3Scene()
 {
-
+	delete skillCardScene;
 }
 
 void Stage3Scene::Update()
@@ -30,6 +30,11 @@ void Stage3Scene::Update()
 	if (Input::Get()->IsKeyDown(VK_F5))
 	{
 		SCENE->ChangeScene("Menu");
+	}
+	if (skillCardScene->IsActive())
+	{
+		skillCardScene->Update();
+		return;
 	}
 
 	player->Update();
@@ -56,6 +61,12 @@ void Stage3Scene::Render(HDC hdc)
 
 	BulletManager::Get()->Render(hdc);
 	EnemyManager::Get()->Render(hdc);
+
+	if (skillCardScene->IsActive())
+	{
+		skillCardScene->Render(hdc);
+		return;
+	}
 }
 
 void Stage3Scene::Start()
@@ -65,6 +76,8 @@ void Stage3Scene::Start()
 	BulletManager::Get();
 	EnemyManager::Get()->SetPlayer(player);
 	EnemyManager::Get()->SetStage(3);
+
+	skillCardScene->Show(player);
 }
 
 void Stage3Scene::End()

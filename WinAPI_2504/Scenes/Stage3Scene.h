@@ -1,5 +1,5 @@
 #pragma once
-
+#include "SKillCardScene.h"
 class Stage3Scene : public Scene
 {
 public:
@@ -16,4 +16,6 @@ private:
 	Player* player;
 	bool isBossDefeated = false;
 	float stageClearTimer = 0.0f;
+
+	SkillCardScene* skillCardScene;
 };

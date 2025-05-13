@@ -147,6 +147,7 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Scenes\MenuScene.h" />
     <ClInclude Include="Scenes\Scene.h" />
+    <ClInclude Include="Scenes\SkillCardScene.h" />
     <ClInclude Include="Scenes\Stage1Scene.h" />
     <ClInclude Include="Scenes\Stage2Scene.h" />
     <ClInclude Include="Scenes\Stage3Scene.h" />
@@ -170,6 +171,7 @@
     <ClCompile Include="Objects\PaintTool.cpp" />
     <ClCompile Include="Objects\Player.cpp" />
     <ClCompile Include="Scenes\MenuScene.cpp" />
+    <ClCompile Include="Scenes\SkillCardScene.cpp" />
     <ClCompile Include="Scenes\Stage1Scene.cpp" />
     <ClCompile Include="Scenes\Stage2Scene.cpp" />
     <ClCompile Include="Scenes\Stage3Scene.cpp" />

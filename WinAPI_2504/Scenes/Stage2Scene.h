@@ -1,5 +1,5 @@
 #pragma once
-
+#include "SKillCardScene.h"
 class Stage2Scene : public Scene
 {
 public:
@@ -14,4 +14,6 @@ public:
 
 private:
 	Player* player;
+
+	SkillCardScene* skillCardScene;
 };

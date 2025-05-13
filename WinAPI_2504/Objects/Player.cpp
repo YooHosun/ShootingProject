@@ -32,9 +32,47 @@ void Player::Render(HDC hdc)
 
 void Player::Fire()
 {
-	Vector2 direction = mousePos - firePos;
+	Vector2 direction = (mousePos - firePos).GetNormalized();
 
-	BulletManager::Get()->Fire(firePos, "Player", direction.GetNormalized());
+	switch (currentAbility)
+	{
+	case PlayerAbility::TripleShot: // Æ®¸®ÇÃ ¼¦
+	{
+
+		BulletManager::Get()->Fire(firePos, "Player", direction);
+
+		BulletManager::Get()->Fire(firePos, "Player", direction.GetRotated(PI / 18));
+
+		BulletManager::Get()->Fire(firePos, "Player", direction.GetRotated(-PI / 18));
+
+		break;
+	}
+
+	case PlayerAbility::DoubleShot:
+	{
+
+		BulletManager::Get()->Fire(firePos, "Player", direction.GetRotated(PI / 36));
+
+		BulletManager::Get()->Fire(firePos, "Player", direction.GetRotated(-PI / 36));
+
+		break;
+	}
+
+	case PlayerAbility::BombShot:
+	{
+		for (int i = 0; i < 8; i++)
+		{
+
+			BulletManager::Get()->Fire(firePos, "Player", direction.GetRotated(i * (PI / 4)));
+		}
+	}
+	default:
+
+		BulletManager::Get()->Fire(firePos, "Player", direction);
+
+		break;
+	}
+
 }
 
 void Player::ControlFire()

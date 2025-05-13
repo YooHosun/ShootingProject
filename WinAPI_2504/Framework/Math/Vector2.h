@@ -42,6 +42,13 @@ struct Vector2
 	float Magnitude() const	{ return sqrt(x * x + y * y); }
 	float SqrMagnitude() const { return x * x + y * y; }
 
+	Vector2 GetRotated(float angle) const
+	{
+		float cosAngle = cos(angle);
+		float sinAngle = sin(angle);
+		return Vector2(x * cosAngle - y * sinAngle, x * sinAngle + y * cosAngle);
+	}
+
 	void Normalize()
 	{
 		float length = Magnitude();

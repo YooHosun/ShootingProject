@@ -5,6 +5,14 @@
 //정방선언
 //class Bullet;
 
+enum class PlayerAbility
+{
+	None,
+	TripleShot,
+	DoubleShot,
+	BombShot
+};
+
 class Player : public Circle
 {
 private:
@@ -19,6 +27,8 @@ public:
 	void Update();	
 	void Render(HDC hdc);
 
+	void SetAbility(PlayerAbility ability) { currentAbility = ability; } // 능력 설정
+	PlayerAbility GetAbility() const { return currentAbility; }
 private:
 	void Fire();
 	void ControlFire();
@@ -33,6 +43,8 @@ private:
 	//Bullet* bullet;
 	//vector<Bullet*> bullets;
 	float angle = PI * 0.5f;
+
+	PlayerAbility currentAbility = PlayerAbility::None;
 
 	Vector2 firePos = {};
 	Vector2 aimPoint = {};
