@@ -1,6 +1,6 @@
 #include "Framework.h"
 
-Player::Player() : Circle(50)
+Player::Player() : Circle(10)
 {
 	hPen = CreatePen(PS_SOLID, 5, RGB(100, 230, 150));
 
@@ -26,8 +26,8 @@ void Player::Render(HDC hdc)
 	//Circle::Render(hdc);
 	DrawLine(hdc);
 
-	MoveToEx(hdc, firePos.x, firePos.y, nullptr);
-	LineTo(hdc, aimPoint.x, aimPoint.y);
+	//MoveToEx(hdc, firePos.x, firePos.y, nullptr);
+	//LineTo(hdc, aimPoint.x, aimPoint.y);
 }
 
 void Player::Fire()
@@ -80,6 +80,8 @@ void Player::Fire()
 	{
 		BulletManager::Get()->Fire(firePos, "Player", direction);
 
+		Vector2 delayedPos = firePos - direction * 20.0f;
+		BulletManager::Get()->Fire(delayedPos, "Player", direction);
 	}
 	default:
 

@@ -9,7 +9,8 @@ SkillCardScene::SkillCardScene()
         PlayerAbility::TripleShot,
         PlayerAbility::DoubleShot,
         PlayerAbility::RLShot,
-        PlayerAbility::BackShot
+        PlayerAbility::BackShot,
+        PlayerAbility::X2Shot
     };
 
     shuffle(allAbilities.begin(), allAbilities.end(), default_random_engine((unsigned int)time(nullptr)));
@@ -69,6 +70,7 @@ string SkillCardScene::GetAbilityName(PlayerAbility ability)
     case PlayerAbility::DoubleShot: return "Double Shot";
     case PlayerAbility::RLShot:     return "RL Shot";
     case PlayerAbility::BackShot:   return "Back Shot";
+    case PlayerAbility::X2Shot:     return "X2 Shot";
     default:                        return "Unknown";
     }
 }
